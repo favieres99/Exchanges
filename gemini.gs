@@ -1,6 +1,3 @@
-API_Public_Key = { }
-API_Private_Key = { }
-
 function GEM_PrivateRequest(gemrequest, limit_trades, time_stamp) {
   function HMACSHA384HEX(s, secret) { return ToHex(Utilities.computeHmacSignature(Utilities.MacAlgorithm.HMAC_SHA_384, s, secret)).toString(); }
   function ToHex(s) { return s.map(function(byte) { return ('0' + (byte & 0xFF).toString(16)).slice(-2);}).join('');  }
@@ -28,8 +25,8 @@ function GEM_PrivateRequest(gemrequest, limit_trades, time_stamp) {
 
 function Type_of_request(type){
   var gemrequest = {
-  'apikey'   : 'account-o4SsTgmotFbGcwo201h6',
-  'secret'   : 'TcfT4GNwY7JKHjaA3Cba6V6hAgH',
+  'apikey'   : '*******',
+  'secret'   : '+******',
   'uri'      : 'https://api.gemini.com',
   'version'  : '/v1/',
   'command'  : type,
