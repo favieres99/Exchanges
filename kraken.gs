@@ -1,6 +1,20 @@
+/**
+ * 25/05/2022
+ * @favieres99
+ * By setting api-key and your secret in the global variable, setting the name of the api-key and the name of the spreadsheet you want to write the info in the Prueba_Krahen functiion, it will fetch all your data from de Kraken API
+ */
+
 API_Public_Key = {}
 API_Private_Key = {}
 
+/**
+ * KAPI_Private computes the call to the API
+ * @param acc_id api_key
+ * @param endpoint the endpoint asked to the API
+ * @param parameteres the parameters sked to the API
+ * @param cooldown counter so there are not too many calls to the API
+ * @return the json from de API
+ */
 function KAPI_Private(acc_id, endpoint, parameters, cooldown) {
   if (cooldown != 0 && cooldown % 7 == 0){
     Utilities.sleep(42000)
@@ -22,7 +36,13 @@ function KAPI_Private(acc_id, endpoint, parameters, cooldown) {
   return http_response
 }
 
-function KAPI_Balance(acc_id) {
+/**
+ * KAPI_Balance writes the balance in the sheet
+ * @param acc_id api-key
+ * @param nameOfSheet sheet to write to
+ * @return
+ */
+function KAPI_Balance(acc_id, nameOfSheet) {
   var acc_balances_json = JSON.parse(KAPI_Private(acc_id, 'Balance', '', 0))
   var acc_balances = new Array
   for ( name in acc_balances_json['result'] ) {
@@ -31,12 +51,18 @@ function KAPI_Balance(acc_id) {
   var primera_fila = ["COIN", "BALANCE"]
   acc_balances.unshift(primera_fila)
 
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Balance");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(nameOfSheet);
   sheet.clear(); 
   sheet.getRange(1,1,acc_balances.length,primera_fila.length).setValues(acc_balances);
 }
 
-function KAPI_Ledgers(acc_id) {
+/**
+ * KAPI_Ledgers writes the balance in the sheet
+ * @param acc_id api_key
+ * @param nameOfSheet sheet to write to
+ * @return
+ */
+function KAPI_Ledgers(acc_id, nameOfSheet) {
   //Para que empiece a enseñar desde cuando queramos
   var all = 1
   var weeks = 0
@@ -70,11 +96,19 @@ function KAPI_Ledgers(acc_id) {
     off = off + 50
   }
 
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Ledgers");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(nameOfSheet);
   sheet.clear(); 
   sheet.getRange(1,1,acc_ledgers.length,primera_fila.length).setValues(acc_ledgers);
 }
 
+/**
+ * Set_time gets todays date and substracts de amount of time you asked for
+ * @param all boolean to get all data
+ * @param weeks how many weeks back are being asked for
+ * @param days how many days back are being asked for
+ * @param hours how many hours back are being asked for
+ * @return how back to the past you need to ask for
+ */
 function Set_time(all, weeks, days, hours){
   if (all)
     return 0
@@ -82,7 +116,13 @@ function Set_time(all, weeks, days, hours){
   return today - weeks * 604800 - days * 86400 - hours * 3600
 }
 
-function KAPI_TradesHistory(acc_id) {
+/**
+ * KAPI_TradesHistory writes de trade history in the sheet
+ * @param acc_id api-key
+ * @param nameOfSheet sheet to write to
+ * @return
+ */
+function KAPI_TradesHistory(acc_id, nameOfSheet) {
   //Para que empiece a enseñar desde cuando queramos
   var all = 1
   var weeks = 0
@@ -116,13 +156,19 @@ function KAPI_TradesHistory(acc_id) {
     off = off + 50
   }
 
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("TradesHistory");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(nameOfSheet);
   sheet.clear(); 
   sheet.getRange(1,1,acc_tradeshistory.length,primera_fila.length).setValues(acc_tradeshistory);
 }
 
+/**
+ * PruebaKraken calls all functions to write
+ * @first_param api-keu
+ * @second_param sheet to write to
+ * @return
+ */
 function PruebaKraken(){
-  KAPI_Balance('api-key-1652460600329');
-//  KAPI_TradesHistory('api-key-1652460600329');
-//  KAPI_Ledgers('api-key-1652460600329');
+  KAPI_Balance('', "Balance");
+  KAPI_TradesHistory('', "TradesHistory");
+  KAPI_Ledgers('', "Ledgers");
 }

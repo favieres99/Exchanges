@@ -41,8 +41,8 @@ function GEM_PrivateRequest(gemrequest, limit_trades, time_stamp) {
  */
 function Type_of_request(endpoint){
   var gemrequest = {
-  'apikey'   : 'account-o4SsTgmotFbGcwo201h6',
-  'secret'   : 'TcfT4GNwY7JKHjaA3Cba6V6hAgH',
+  'apikey'   : '*******',
+  'secret'   : '*******',
   'uri'      : 'https://api.gemini.com',
   'version'  : '/v1/',
   'command'  : endpoint,
